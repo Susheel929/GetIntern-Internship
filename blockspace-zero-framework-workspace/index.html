@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A zero-framework Notion-style workspace and Kanban board." />
+  <title>Blockspace — Zero-Framework Workspace</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand-wrap">
+        <div class="brand-mark">B</div>
+        <div>
+          <div class="brand-name">Blockspace</div>
+          <div class="brand-subtitle">Zero-framework workspace</div>
+        </div>
+      </div>
+
+      <div class="topbar-actions">
+        <span id="save-status" class="save-status" aria-live="polite">Saved locally</span>
+        <button id="reset-board" class="ghost-button" type="button">Reset</button>
+        <button id="add-column" class="primary-button" type="button">+ Column</button>
+      </div>
+    </header>
+
+    <main class="main-content">
+      <section class="hero">
+        <div>
+          <h1>Build your workspace in blocks.</h1>
+          <p class="hero-copy">Create cards, edit them directly, move them between columns, and keep everything across reloads with browser storage.</p>
+        </div>
+        <button id="add-card-top" class="primary-button large" type="button">+ Add task</button>
+      </section>
+
+      <section class="stats" aria-label="Board statistics">
+        <div class="stat-card">
+          <span class="stat-label">Tasks</span>
+          <strong id="task-count">0</strong>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Columns</span>
+          <strong id="column-count">0</strong>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Completed</span>
+          <strong id="completed-count">0%</strong>
+        </div>
+        <div class="stat-card">
+          <span class="stat-label">Storage</span>
+          <strong>localStorage</strong>
+        </div>
+      </section>
+
+      <section id="board" class="board" aria-label="Kanban board"></section>
+    </main>
+
+    <footer class="footer">No frameworks. Native Drag & Drop. DOM APIs. Persistent browser state.</footer>
+  </div>
+
+  <template id="card-template">
+    <article class="task-card" draggable="true">
+      <div class="drag-handle" title="Drag task">⋮⋮</div>
+      <div class="task-body">
+        <div class="task-title" contenteditable="true" spellcheck="false" role="textbox" aria-label="Task title"></div>
+        <div class="task-description" contenteditable="true" spellcheck="false" role="textbox" aria-label="Task description"></div>
+        <div class="task-meta">
+          <button class="status-button" type="button" aria-label="Toggle completed state">○</button>
+          <span class="task-id"></span>
+          <button class="delete-card" type="button" aria-label="Delete task">×</button>
+        </div>
+      </div>
+    </article>
+  </template>
+
+  <script src="app.js" defer></script>
+</body>
+</html>

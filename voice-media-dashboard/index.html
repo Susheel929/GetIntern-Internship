@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SIGNAL — Voice Media Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="css/base.css" />
+<link rel="stylesheet" href="css/layout.css" />
+<link rel="stylesheet" href="css/components.css" />
+</head>
+<body>
+
+  <div class="scanline-overlay" aria-hidden="true"></div>
+
+  <header class="console-header">
+    <div class="brand">
+      <span class="brand-mark">◈</span>
+      <span class="brand-text">SIGNAL<span class="brand-sub">/media console</span></span>
+    </div>
+    <div class="header-status" id="apiStatusRow" aria-live="polite">
+      <span class="status-chip" id="statusNews">NEWS <i class="dot"></i></span>
+      <span class="status-chip" id="statusWeather">ATLAS <i class="dot"></i></span>
+      <span class="status-chip" id="statusSpace">ORBIT <i class="dot"></i></span>
+    </div>
+  </header>
+
+  <main class="console-main">
+
+    <!-- ============ LEFT RAIL: VOICE + SEARCH ============ -->
+    <section class="rail rail-left" aria-label="Voice command and search">
+
+      <div class="panel panel-mic">
+        <h2 class="panel-title">Voice Input</h2>
+        <p class="panel-hint">Say a command, or type below.</p>
+
+        <button id="micButton" class="mic-button" type="button" aria-pressed="false" aria-label="Activate voice recognition">
+          <svg class="mic-icon" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3Z" stroke="currentColor" stroke-width="1.6"/>
+            <path d="M19 11a7 7 0 0 1-14 0M12 18v3" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </button>
+
+        <div class="waveform" id="waveform" aria-hidden="true">
+          <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+        </div>
+
+        <div class="mic-state" id="micState">idle — tap to listen</div>
+        <div class="transcript-box" id="transcriptBox">Transcript will appear here…</div>
+
+        <div class="command-legend">
+          <span class="legend-title">Try saying:</span>
+          <code>"search news for &lt;topic&gt;"</code>
+          <code>"weather in &lt;city&gt;"</code>
+          <code>"show space"</code>
+          <code>"clear"</code>
+        </div>
+      </div>
+
+      <div class="panel panel-search">
+        <h2 class="panel-title">Manual Search</h2>
+        <form id="searchForm" novalidate>
+          <label for="searchInput" class="field-label">Query</label>
+          <input
+            type="text"
+            id="searchInput"
+            name="searchInput"
+            class="text-input"
+            placeholder="e.g. climate, tokyo, mars"
+            autocomplete="off"
+            maxlength="80"
+          />
+          <div class="field-feedback" id="searchFeedback" aria-live="polite"></div>
+
+          <label for="cityInput" class="field-label">City (weather)</label>
+          <input
+            type="text"
+            id="cityInput"
+            name="cityInput"
+            class="text-input"
+            placeholder="e.g. Warangal"
+            autocomplete="off"
+            maxlength="60"
+          />
+          <div class="field-feedback" id="cityFeedback" aria-live="polite"></div>
+
+          <label for="emailInput" class="field-label">Alert email <span class="optional">(optional, for demo validation)</span></label>
+          <input
+            type="text"
+            id="emailInput"
+            name="emailInput"
+            class="text-input"
+            placeholder="you@example.com"
+            autocomplete="off"
+            maxlength="120"
+          />
+          <div class="field-feedback" id="emailFeedback" aria-live="polite"></div>
+
+          <button type="submit" class="submit-button" id="submitButton">Run Query</button>
+        </form>
+      </div>
+
+    </section>
+
+    <!-- ============ CENTER: RESULTS ============ -->
+    <section class="rail rail-center" aria-label="Results">
+
+      <div class="tabs" role="tablist" aria-label="Result categories">
+        <button class="tab active" data-tab="news" role="tab" aria-selected="true">News</button>
+        <button class="tab" data-tab="weather" role="tab" aria-selected="false">Weather</button>
+        <button class="tab" data-tab="space" role="tab" aria-selected="false">Space</button>
+      </div>
+
+      <div class="tab-panel active" id="panel-news" role="tabpanel">
+        <div class="panel-header-row">
+          <h2 class="panel-title">Headlines</h2>
+          <span class="result-meta" id="newsMeta"></span>
+        </div>
+        <div id="newsResults" class="results-grid"></div>
+      </div>
+
+      <div class="tab-panel" id="panel-weather" role="tabpanel">
+        <div class="panel-header-row">
+          <h2 class="panel-title">Weather</h2>
+          <span class="result-meta" id="weatherMeta"></span>
+        </div>
+        <div id="weatherResults" class="results-single"></div>
+      </div>
+
+      <div class="tab-panel" id="panel-space" role="tabpanel">
+        <div class="panel-header-row">
+          <h2 class="panel-title">Astronomy Picture of the Day</h2>
+          <span class="result-meta" id="spaceMeta"></span>
+        </div>
+        <div id="spaceResults" class="results-single"></div>
+      </div>
+
+    </section>
+
+    <!-- ============ RIGHT RAIL: LOG ============ -->
+    <section class="rail rail-right" aria-label="Activity log">
+      <div class="panel panel-log">
+        <h2 class="panel-title">Activity Log</h2>
+        <p class="panel-hint">Requests, voice events, and validation flags.</p>
+        <ul id="activityLog" class="activity-log" aria-live="polite"></ul>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="toast-stack" id="toastStack" aria-live="assertive"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/validators.js"></script>
+  <script src="js/logger.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/speech.js"></script>
+  <script src="js/ui.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

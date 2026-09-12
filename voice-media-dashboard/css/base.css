@@ -1,0 +1,112 @@
+/* ===========================================================
+   BASE — tokens, resets, typography
+   =========================================================== */
+
+:root {
+  /* -- palette -- */
+  --bg-void:        #0b0d10;
+  --bg-panel:       #111418;
+  --bg-panel-raised:#161a1f;
+  --bg-input:       #0d0f13;
+  --border-hair:    #22272e;
+  --border-hair-lit:#33393f;
+
+  --text-primary:   #edeef0;
+  --text-secondary: #9aa2ac;
+  --text-tertiary:  #5b636c;
+
+  --signal-cyan:      #4ce0d2;
+  --signal-cyan-dim:  #2a4d49;
+  --signal-cyan-glow: rgba(76, 224, 210, 0.35);
+
+  --warn-amber:      #e0a84c;
+  --warn-amber-dim:  #4d3f2a;
+  --error-red:       #e0604c;
+  --error-red-dim:   #4d2a2a;
+  --ok-green:        #6ee08a;
+
+  /* -- type -- */
+  --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  /* -- layout -- */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --header-h: 64px;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--bg-void);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+body {
+  background-image:
+    radial-gradient(circle at 15% 0%, rgba(76, 224, 210, 0.06), transparent 45%),
+    radial-gradient(circle at 85% 100%, rgba(224, 168, 76, 0.05), transparent 40%);
+  min-height: 100vh;
+}
+
+h1, h2, h3 { margin: 0; font-family: var(--font-mono); }
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+}
+
+input {
+  font-family: inherit;
+  color: inherit;
+}
+
+a { color: var(--signal-cyan); }
+
+::selection {
+  background: var(--signal-cyan-glow);
+  color: var(--text-primary);
+}
+
+/* subtle CRT scanline texture over the whole console — signature element support */
+.scanline-overlay {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 999;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.012) 0px,
+    rgba(255, 255, 255, 0.012) 1px,
+    transparent 1px,
+    transparent 3px
+  );
+  mix-blend-mode: overlay;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* visible keyboard focus, everywhere */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--signal-cyan);
+  outline-offset: 2px;
+  border-radius: var(--radius-sm);
+}

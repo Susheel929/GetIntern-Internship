@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="PulseBoard — a deployable, framework-free SaaS analytics workspace for tracking revenue, customers, and events.">
+  <meta name="theme-color" content="#0b1020">
+  <title>PulseBoard — Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app"></div>
+  <div id="toast-region" class="toast-region" aria-live="polite" aria-atomic="true"></div>
+
+  <dialog id="record-dialog" class="modal">
+    <form id="record-form" method="dialog" novalidate>
+      <div class="modal-head">
+        <div>
+          <p class="eyebrow">Data management</p>
+          <h2 id="record-dialog-title">Add record</h2>
+        </div>
+        <button type="button" class="icon-button" data-dialog-close aria-label="Close dialog">×</button>
+      </div>
+      <input type="hidden" id="record-id">
+      <div class="form-grid">
+        <label>Name<input id="record-name" name="name" maxlength="80" required></label>
+        <label>Email<input id="record-email" name="email" type="email" maxlength="120" required></label>
+        <label>Plan
+          <select id="record-plan" name="plan">
+            <option>Starter</option><option>Growth</option><option>Scale</option>
+          </select>
+        </label>
+        <label>MRR (₹)<input id="record-mrr" name="mrr" type="number" min="0" step="0.01" required></label>
+        <label>Status
+          <select id="record-status" name="status">
+            <option>Active</option><option>Trial</option><option>Churned</option>
+          </select>
+        </label>
+        <label>Joined<input id="record-joined" name="joined" type="date" required></label>
+      </div>
+      <p id="record-error" class="form-error" role="alert"></p>
+      <div class="modal-actions">
+        <button type="button" class="button ghost" data-dialog-close>Cancel</button>
+        <button type="submit" class="button primary">Save record</button>
+      </div>
+    </form>
+  </dialog>
+
+  <input id="csv-input" type="file" accept=".csv,text/csv" hidden>
+  <script src="app.js" defer></script>
+</body>
+</html>
